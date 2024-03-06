@@ -7,6 +7,16 @@ export class Model {
   })
   name: string;
 
+  @Column('text', {
+    nullable: true,
+  })
+  variant: string;
+
+  @Column('smallint', {
+    nullable: true,
+  })
+  font: number;
+
   @Column('boolean', {
     default: true,
   })
