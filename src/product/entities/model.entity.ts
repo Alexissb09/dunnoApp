@@ -1,4 +1,5 @@
 import { BeforeInsert, Column, Entity, PrimaryColumn } from 'typeorm';
+import { Variant } from '../interfaces/variant.interface';
 
 @Entity()
 export class Model {
@@ -7,15 +8,10 @@ export class Model {
   })
   name: string;
 
-  @Column('text', {
+  @Column('jsonb', {
     nullable: true,
   })
-  variant: string;
-
-  @Column('smallint', {
-    nullable: true,
-  })
-  font: number;
+  variant?: Variant;
 
   @Column('boolean', {
     default: true,

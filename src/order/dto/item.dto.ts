@@ -45,5 +45,5 @@ export class ItemDto {
 
   @IsOptional()
   @IsString()
-  extra: string;
+  extra?: string;
 }

@@ -1,4 +1,7 @@
-import { IsInt, IsOptional, IsString, Min, MinLength } from 'class-validator';
+import {  IsOptional, IsString, MinLength, ValidateNested } from 'class-validator';
+import { Variant } from '../interfaces/variant.interface';
+import { VariantDto } from './variant.dto';
+import { Type } from 'class-transformer';
 
 export class CreateModelDto {
   @IsString()
@@ -6,12 +9,7 @@ export class CreateModelDto {
   name: string;
 
   @IsOptional()
-  @IsString()
-  @MinLength(1)
-  variant?: string;
-
-  @IsOptional()
-  @IsInt()
-  @Min(1)
-  font?: number;
+  @ValidateNested({ each: true })
+  @Type(() => VariantDto)
+  variant?: Variant
 }
