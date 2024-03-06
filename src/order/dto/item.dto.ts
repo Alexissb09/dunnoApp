@@ -1,16 +1,13 @@
 import {
   ArrayMinSize,
   IsArray,
-  IsInstance,
   IsInt,
   IsNumber,
   IsOptional,
   IsString,
   Min,
 } from 'class-validator';
-import { Type } from 'class-transformer';
 import { Color } from 'src/interfaces/color.interface';
-import { CreateModelDto } from 'src/product/dto/create-model.dto';
 import { Model } from 'src/product/entities/model.entity';
 
 export class ItemDto {
@@ -18,8 +15,7 @@ export class ItemDto {
   @Min(1)
   amount: number;
 
-  @IsInstance(Model)
-  @Type(() => CreateModelDto)
+  @IsString()
   model: Model;
 
   @IsArray({ message: 'Must be an array of colors' })
