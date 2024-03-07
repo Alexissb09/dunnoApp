@@ -3,7 +3,9 @@ import {
   IsArray,
   IsDate,
   IsEnum,
+  IsNotEmptyObject,
   IsNumber,
+  IsObject,
   IsOptional,
   IsString,
   Min,
@@ -13,6 +15,8 @@ import { Status } from '../interfaces/status.interface';
 import { Item } from '../interfaces/item.interface';
 import { ItemDto } from './item.dto';
 import { Type } from 'class-transformer';
+import { Customer } from '../interfaces/customer.interface';
+import { CustomerDto } from './customer.dto';
 
 export class CreateOrderDto {
   @IsDate()
@@ -38,4 +42,9 @@ export class CreateOrderDto {
   @IsNumber({ maxDecimalPlaces: 2 })
   @Min(0)
   total: number;
+
+  @IsObject()
+  @IsNotEmptyObject()
+  @Type(() => CustomerDto)
+  customer: Customer;
 }

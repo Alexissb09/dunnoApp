@@ -1,7 +1,7 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { Status } from '../interfaces/status.interface';
 import { Item } from '../interfaces/item.interface';
-import { Color } from 'src/interfaces/color.interface';
+import { Customer } from '../interfaces/customer.interface';
 
 @Entity()
 export class Order {
@@ -31,4 +31,13 @@ export class Order {
     nullable: true,
   })
   items: Item[];
+
+  @Column('jsonb')
+  customer: Customer
+
+  @BeforeInsert()
+  toLowerCaseName() {
+    this.customer.username.toLowerCase();
+    this.customer.contactmethod.toLowerCase();
+  }
 }
