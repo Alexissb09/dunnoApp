@@ -56,4 +56,10 @@ export class ItemDto {
   @IsOptional()
   @IsString()
   extra?: string;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsInt()
+  @Min(1)
+  font?: number;
 }

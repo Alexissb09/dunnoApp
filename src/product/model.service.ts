@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateModelDto } from './dto/create-model.dto';
 import { UpdateModelDto } from './dto/update-model.dto';
 import { Model } from './entities/model.entity';
@@ -14,7 +18,6 @@ export class ModelService {
 
   async create(createModelDto: CreateModelDto) {
     const model = this.modelRepository.create(createModelDto);
-
     try {
       await this.modelRepository.save(model);
 
@@ -28,17 +31,21 @@ export class ModelService {
     }
   }
 
-  findAll() {
-    return `This action returns all product`;
+  async findAll() {
+    const models = await this.modelRepository.find();
+
+    return models;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} product`;
+  async findOne(name: string) {
+    const model = await this.modelRepository.findOneBy({
+      name,
+    });
+
+    return model;
   }
 
-  update(id: number, updateModelDto: UpdateModelDto) {
-    return `This action updates a #${id} product`;
-  }
+  async update(name: string, updateModelDto: UpdateModelDto) {}
 
   remove(id: number) {
     return `This action removes a #${id} product`;

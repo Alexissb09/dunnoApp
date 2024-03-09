@@ -1,4 +1,4 @@
-import { Controller, Post, Body, UseGuards } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, Get, Param } from '@nestjs/common';
 import { ModelService } from './model.service';
 import { CreateModelDto } from './dto/create-model.dto';
 import { AuthGuard } from '@nestjs/passport';
@@ -13,5 +13,15 @@ export class ProductController {
   @Post()
   create(@Body() createModelDto: CreateModelDto) {
     return this.modelService.create(createModelDto);
+  }
+
+  @Get()
+  findAll() {
+    return this.modelService.findAll();
+  }
+
+  @Get(':name')
+  findOne(@Param('name') name: string) {
+    return this.modelService.findOne(name);
   }
 }

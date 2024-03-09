@@ -1,25 +1,25 @@
-import { BeforeInsert, Column, Entity, PrimaryColumn } from 'typeorm';
-import { Variant } from '../interfaces/variant.interface';
+import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
+import { Name } from 'src/product/interfaces/variant.interface';
+import { IsOptional } from 'class-validator';
 
 @Entity()
 export class Model {
-  @PrimaryColumn('text', {
+  @PrimaryColumn('varchar', {
     unique: true,
+    nullable: false,
   })
   name: string;
 
-  @Column('jsonb', {
+  @Column('enum', {
+    enum: Name,
     nullable: true,
   })
-  variant?: Variant;
+  variant?: Name[];
 
+  @IsOptional()
   @Column('boolean', {
     default: true,
+    nullable: true,
   })
   isActive: boolean;
-
-  @BeforeInsert()
-  toLowerCaseName() {
-    this.name.toLowerCase();
-  }
 }

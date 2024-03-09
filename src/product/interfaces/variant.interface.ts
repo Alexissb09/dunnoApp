@@ -1,4 +1,6 @@
-export interface Variant {
-  name: string;
-  font: number;
+export enum Name {
+  mini = 'mini',
+  mediano = 'mediano',
+  grande = 'grande',
+  set = 'set',
 }

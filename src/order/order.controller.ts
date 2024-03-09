@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, UseGuards, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  UseGuards,
+  Query,
+  Param,
+} from '@nestjs/common';
 import { OrderService } from './order.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { AuthGuard } from '@nestjs/passport';
@@ -19,5 +27,10 @@ export class OrderController {
   @Get()
   findAll(@Query() paginationDto: PaginationDto) {
     return this.orderService.findAll(paginationDto);
+  }
+
+  @Get(':term')
+  findOne(@Param('term') term: string) {
+    return this.orderService.findOne(term);
   }
 }

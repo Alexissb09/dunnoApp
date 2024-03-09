@@ -1,13 +1,12 @@
 import {
+  IsArray,
+  IsEnum,
   IsOptional,
   IsString,
   MinLength,
-  ValidateNested,
 } from 'class-validator';
-import { Variant } from '../interfaces/variant.interface';
-import { VariantDto } from './variant.dto';
-import { Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
+import { Name } from '../interfaces/variant.interface';
 
 export class CreateModelDto {
   @ApiProperty()
@@ -17,10 +16,11 @@ export class CreateModelDto {
 
   @ApiProperty({
     required: false,
-    type: VariantDto
   })
   @IsOptional()
-  @ValidateNested({ each: true })
-  @Type(() => VariantDto)
-  variant?: Variant;
+  @IsArray()
+  @IsEnum(Name, {
+    each: true,
+  })
+  variant?: Name[];
 }
