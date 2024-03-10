@@ -18,6 +18,7 @@ import { Type } from 'class-transformer';
 import { Customer } from '../interfaces/customer.interface';
 import { CustomerDto } from './customer.dto';
 import { ApiProperty } from '@nestjs/swagger';
+import { PaymentMethod } from '../interfaces/paymentmethod.interface';
 
 export class CreateOrderDto {
   @ApiProperty({
@@ -65,4 +66,8 @@ export class CreateOrderDto {
   @IsNotEmptyObject()
   @Type(() => CustomerDto)
   customer: Customer;
+
+  @ApiProperty()
+  @IsEnum(PaymentMethod)
+  paymentmethod: PaymentMethod;
 }

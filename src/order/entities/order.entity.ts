@@ -2,6 +2,7 @@ import { BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { Status } from '../interfaces/status.interface';
 import { Item } from '../interfaces/item.interface';
 import { Customer } from '../interfaces/customer.interface';
+import { PaymentMethod } from '../interfaces/paymentmethod.interface';
 
 @Entity()
 export class Order {
@@ -33,7 +34,12 @@ export class Order {
   items: Item[];
 
   @Column('jsonb')
-  customer: Customer
+  customer: Customer;
+
+  @Column('enum', {
+    enum: PaymentMethod,
+  })
+  paymentmethod: PaymentMethod;
 
   @BeforeInsert()
   toLowerCaseName() {

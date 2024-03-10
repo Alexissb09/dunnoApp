@@ -2,6 +2,8 @@ import { Module } from '@nestjs/common';
 import { AuthModule } from './auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
+import { CacheModule } from '@nestjs/cache-manager';
+
 import { User } from './auth/entities/auth.entity';
 import { OrderModule } from './order/order.module';
 import { Order } from './order/entities/order.entity';
@@ -21,6 +23,9 @@ import { Model } from './product/entities/model.entity';
       password: process.env.DB_PASSWORD,
       entities: [User, Order, Model],
       synchronize: true,
+    }),
+    CacheModule.register({
+      isGlobal: true,
     }),
     AuthModule,
     OrderModule,
