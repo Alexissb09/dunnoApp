@@ -13,6 +13,7 @@ export class Model {
   @Column('enum', {
     enum: Name,
     nullable: true,
+    array: true,
   })
   variant?: Name[];
 

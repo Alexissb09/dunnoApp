@@ -40,6 +40,11 @@ export class ModelService {
       };
     } catch (err) {
       console.log(err);
+
+      if ((err.code = '22P02')) {
+        throw new BadRequestException('Model already exist in database');
+      }
+
       throw new BadRequestException(err.detail);
     }
   }
