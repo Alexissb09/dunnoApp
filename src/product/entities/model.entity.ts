@@ -16,10 +16,8 @@ export class Model {
   })
   variant?: Name[];
 
-  @IsOptional()
   @Column('boolean', {
     default: true,
-    nullable: true,
   })
   isActive: boolean;
 }
