@@ -106,9 +106,8 @@ export class OrderService {
 
       return order;
     } catch (err) {
-      if ((err.code = '22P02')) {
-        throw new NotFoundException(`Order ${term} not found`);
-      }
+      console.log(err);
+      throw new BadRequestException(err.detail);
     }
   }
 

@@ -3,6 +3,7 @@ import { Status } from '../interfaces/status.interface';
 import { Item } from '../interfaces/item.interface';
 import { Customer } from '../interfaces/customer.interface';
 import { PaymentMethod } from '../interfaces/paymentmethod.interface';
+import { TypeProduct } from '../interfaces/product.interface';
 
 @Entity()
 export class Order {
@@ -40,6 +41,11 @@ export class Order {
     enum: PaymentMethod,
   })
   paymentmethod: PaymentMethod;
+
+  @Column('enum', {
+    enum: TypeProduct,
+  })
+  typeProduct: TypeProduct;
 
   @BeforeInsert()
   toLowerCaseName() {

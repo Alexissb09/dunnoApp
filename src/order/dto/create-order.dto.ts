@@ -7,7 +7,6 @@ import {
   IsNumber,
   IsObject,
   IsOptional,
-  IsString,
   Min,
   ValidateNested,
 } from 'class-validator';
@@ -19,6 +18,7 @@ import { Customer } from '../interfaces/customer.interface';
 import { CustomerDto } from './customer.dto';
 import { ApiProperty } from '@nestjs/swagger';
 import { PaymentMethod } from '../interfaces/paymentmethod.interface';
+import { TypeProduct } from '../interfaces/product.interface';
 
 export class CreateOrderDto {
   @ApiProperty({
@@ -70,4 +70,8 @@ export class CreateOrderDto {
   @ApiProperty()
   @IsEnum(PaymentMethod)
   paymentmethod: PaymentMethod;
+
+  @ApiProperty()
+  @IsEnum(TypeProduct)
+  typeproduct: TypeProduct;
 }
