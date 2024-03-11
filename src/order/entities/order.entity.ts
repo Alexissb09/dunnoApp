@@ -1,4 +1,12 @@
-import { BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { BadRequestException } from '@nestjs/common';
+import {
+  BeforeInsert,
+  BeforeUpdate,
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+
 import { Status } from '../interfaces/status.interface';
 import { Item } from '../interfaces/item.interface';
 import { Customer } from '../interfaces/customer.interface';
@@ -45,11 +53,22 @@ export class Order {
   @Column('enum', {
     enum: TypeProduct,
   })
-  typeProduct: TypeProduct;
+  typeproduct: TypeProduct;
+
+  @Column('boolean', {
+    default: true,
+  })
+  isActive: boolean;
 
   @BeforeInsert()
   toLowerCaseName() {
     this.customer.username.toLowerCase();
     this.customer.contactmethod.toLowerCase();
+
+    if (!this.isActive) {
+      throw new BadRequestException(
+        "You cannot create an order with 'isActive' property in false",
+      );
+    }
   }
 }

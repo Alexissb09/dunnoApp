@@ -21,18 +21,20 @@ export class OrderService {
     private readonly orderRepository: Repository<Order>,
 
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
-
-    // Para saber la cadena de conexion
-    private readonly dataSource: DataSource,
   ) {}
 
   private key: string = 'order';
 
   // Buscamos en bd y asignamos en cache los pedidos
   private async updateCache(limit?: number, offset?: number) {
+    await this.cacheManager.reset();
+
     const orders = await this.orderRepository.find({
       take: limit,
       skip: offset,
+      where: {
+        isActive: true,
+      },
     });
 
     await this.cacheManager.set(this.key, orders, 0);
@@ -60,16 +62,18 @@ export class OrderService {
 
       await this.orderRepository.save(order);
 
-      const orderprueba: Order[] = await this.cacheManager.get(this.key);
-      orderprueba.push(order);
+      await this.updateCache();
 
-      await this.cacheManager.set(this.key, orderprueba);
+      let orders: Order[] = await this.cacheManager.get(this.key);
+
+      await this.cacheManager.set(this.key, orders);
 
       return {
         msg: 'Order created',
         order,
       };
     } catch (err) {
+      console.log(err);
       throw new BadRequestException(err.detail);
     }
   }
@@ -88,34 +92,64 @@ export class OrderService {
   }
 
   async findOne(term: string) {
-    try {
-      let order: Order;
+    let order: Order;
 
-      const orders: Order[] = await this.cacheManager.get(this.key);
+    const orders: Order[] = await this.cacheManager.get(this.key);
 
-      // Busca en bd si no hay nada en cache
-      if (!orders) {
-        order = await this.orderRepository.findOneBy({ id: term });
-        return order;
-      }
-
+    // Busca en bd si no hay nada en cache
+    if (!orders) {
+      order = await this.orderRepository.findOneBy({
+        id: term,
+        isActive: true,
+      });
+    } else {
       // Busca en cache
-      order = orders.find((order) => order.id === term);
-
-      if (!order) throw new NotFoundException(`Order ${term} not found`);
-
-      return order;
-    } catch (err) {
-      console.log(err);
-      throw new BadRequestException(err.detail);
+      order = orders.find(
+        (order) => order.id === term && order.isActive === true,
+      );
     }
+
+    if (!order) throw new NotFoundException(`Order ${term} not found`);
+
+    return order;
   }
 
   async update(id: string, updateOrderDto: UpdateOrderDto) {
-    return `This action updates a #${id} order`;
+    const order = await this.findOne(id);
+
+    if (!order) {
+      throw new NotFoundException(`Order with id ${id} not found`);
+    }
+
+    Object.assign(order, updateOrderDto);
+
+    // Por si se hace el gracioso
+    order.isActive = true;
+
+    await this.orderRepository.save(order);
+    await this.updateCache();
+
+    return {
+      msg: 'Order updated',
+      order,
+    };
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} order`;
+  async remove(id: string) {
+    const order = await this.findOne(id);
+
+    if (!order) {
+      throw new NotFoundException(`Order with id ${id} not found`);
+    }
+
+    order.isActive = false;
+
+    await this.orderRepository.save(order);
+    await this.updateCache();
+
+    return {
+      msg: 'Order deleted',
+      order,
+    };
   }
 }
