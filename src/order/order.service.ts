@@ -53,7 +53,7 @@ export class OrderService {
 
     const order = this.orderRepository.create({
       ...createOrderDto,
-      date: new Date(),
+      date: new Date().toLocaleString('es-AR'),
       total,
     });
 
