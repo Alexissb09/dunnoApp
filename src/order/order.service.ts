@@ -6,13 +6,14 @@ import {
 } from '@nestjs/common';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DataSource, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { Order } from './entities/order.entity';
 import { PaginationDto } from '../common/dto/pagination.dto';
 import { Cache } from 'cache-manager';
+import { ConstantsService } from '../common/constants/constant.service';
 
 @Injectable()
 export class OrderService {
@@ -21,9 +22,11 @@ export class OrderService {
     private readonly orderRepository: Repository<Order>,
 
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
+
+    private readonly constantService: ConstantsService,
   ) {}
 
-  private key: string = 'order';
+  private key: string = this.constantService.ORDER_KEY;
 
   // Buscamos en bd y asignamos en cache los pedidos
   private async updateCache(limit?: number, offset?: number) {
@@ -53,7 +56,7 @@ export class OrderService {
 
     const order = this.orderRepository.create({
       ...createOrderDto,
-      date: new Date().toLocaleString('es-AR'),
+      date: new Date(),
       total,
     });
 
@@ -78,7 +81,7 @@ export class OrderService {
     }
   }
 
-  async findAll(paginationDto: PaginationDto) {
+  async findAll(paginationDto?: PaginationDto) {
     const { limit, offset = 0 } = paginationDto;
 
     const orders = await this.cacheManager.get(this.key);
