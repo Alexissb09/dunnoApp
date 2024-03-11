@@ -65,7 +65,7 @@ export class Order {
     this.customer.username.toLowerCase();
     this.customer.contactmethod.toLowerCase();
 
-    if (!this.isActive) {
+    if (this.isActive === false) {
       throw new BadRequestException(
         "You cannot create an order with 'isActive' property in false",
       );
