@@ -37,6 +37,15 @@ export class ClousuresService {
       (order) => order.date >= from && order.date <= until,
     );
 
+    let totalProfit: number = 0;
+
+    ordersByDate.map((order) => {
+      totalProfit += order.profit + 1 // arreglar 
+      console.log(totalProfit);
+    });
+
+    console.log(totalProfit);
+
     return ordersByDate;
   }
 }

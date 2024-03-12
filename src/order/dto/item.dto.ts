@@ -64,8 +64,7 @@ export class ItemDto {
   font?: number;
 
   @ApiProperty()
-  @IsOptional()
   @IsNumber({ maxDecimalPlaces: 2 })
   @Min(0)
-  cost?: number;
+  cost: number;
 }

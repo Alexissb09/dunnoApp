@@ -27,15 +27,15 @@ export class Order {
   })
   status?: string;
 
-  @Column('decimal', {
+  @Column('float', {
     default: 0,
   })
   downpayment?: number;
 
-  @Column('decimal', {
+  @Column('float', {
     default: 0,
   })
-  total?: number;
+  total: number;
 
   @Column('jsonb', {
     nullable: true,
@@ -61,12 +61,12 @@ export class Order {
   isActive: boolean;
 
   @Column('int2', {
-    nullable: true,
+    default: 0,
   })
   box: number;
 
-  @Column('decimal', {
-    nullable: true,
+  @Column('float', {
+    default: 0,
   })
   profit: number;
 

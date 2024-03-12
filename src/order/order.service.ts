@@ -46,29 +46,26 @@ export class OrderService {
   }
 
   async create(createOrderDto: CreateOrderDto) {
-    let total: number = 0;
-
     const { typeproduct } = createOrderDto;
+
+    createOrderDto.total = 0;
 
     for (const item of createOrderDto.items) {
       item.subtotal = item.amount * item.price;
-
-      total += item.subtotal;
+      createOrderDto.total += item.subtotal;
     }
 
-    if (typeproduct === 'deco') {
-      let totalCost: number = 0;
-      for (const item of createOrderDto.items) {
-        totalCost += item.cost * item.amount;
-      }
+    let totalCost: number = 0;
 
-      createOrderDto.profit = total - totalCost;
+    for (const item of createOrderDto.items) {
+      totalCost += item.cost * item.amount;
     }
+
+    createOrderDto.profit = createOrderDto.total - totalCost;
 
     const order = this.orderRepository.create({
       ...createOrderDto,
       date: new Date(),
-      total,
     });
 
     try {
@@ -81,7 +78,6 @@ export class OrderService {
       let orders: Order[] = await this.cacheManager.get(this.key);
 
       await this.cacheManager.set(this.key, orders);
-
       return {
         msg: 'Order created',
         order,
