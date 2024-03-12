@@ -48,10 +48,21 @@ export class OrderService {
   async create(createOrderDto: CreateOrderDto) {
     let total: number = 0;
 
+    const { typeproduct } = createOrderDto;
+
     for (const item of createOrderDto.items) {
       item.subtotal = item.amount * item.price;
 
       total += item.subtotal;
+    }
+
+    if (typeproduct === 'deco') {
+      let totalCost: number = 0;
+      for (const item of createOrderDto.items) {
+        totalCost += item.cost * item.amount;
+      }
+
+      createOrderDto.profit = total - totalCost;
     }
 
     const order = this.orderRepository.create({

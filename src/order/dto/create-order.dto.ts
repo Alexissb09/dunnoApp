@@ -3,6 +3,7 @@ import {
   IsArray,
   IsDate,
   IsEnum,
+  IsInt,
   IsNotEmptyObject,
   IsNumber,
   IsObject,
@@ -74,4 +75,15 @@ export class CreateOrderDto {
   @ApiProperty()
   @IsEnum(TypeProduct)
   typeproduct: TypeProduct;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsInt()
+  @Min(1)
+  box?: number;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsNumber({ maxDecimalPlaces: 2 })
+  profit?: number;
 }

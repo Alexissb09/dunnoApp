@@ -7,4 +7,5 @@ export interface Item {
   model: Model;
   color: Color[];
   price: number;
+  cost: number;
 }

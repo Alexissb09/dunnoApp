@@ -60,6 +60,16 @@ export class Order {
   })
   isActive: boolean;
 
+  @Column('int2', {
+    nullable: true,
+  })
+  box: number;
+
+  @Column('decimal', {
+    nullable: true,
+  })
+  profit: number;
+
   @BeforeInsert()
   toLowerCaseName() {
     this.customer.username.toLowerCase();
