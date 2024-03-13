@@ -1,15 +1,15 @@
 import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { OrderService } from './order.service';
 import { ClosuresController, OrderController } from './order.controller';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { Order } from './entities/order.entity';
 import { AuthModule } from 'src/auth/auth.module';
-import { ClousuresService } from './services/clousures/clousures.service';
+import { ClosuresService } from './services/clousures/closures.service';
 import { ConstantsService } from '../common/constants/constant.service';
 
 @Module({
   controllers: [OrderController, ClosuresController],
-  providers: [OrderService, ClousuresService, ConstantsService],
+  providers: [OrderService, ClosuresService, ConstantsService],
   imports: [TypeOrmModule.forFeature([Order]), AuthModule],
   exports: [OrderService],
 })

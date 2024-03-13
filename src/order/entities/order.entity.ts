@@ -18,7 +18,7 @@ export class Order {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column('date')
+  @Column('timestamptz')
   date: Date;
 
   @Column('enum', {

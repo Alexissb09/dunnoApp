@@ -9,17 +9,19 @@ import {
   Patch,
   ParseUUIDPipe,
   Delete,
+  Header,
 } from '@nestjs/common';
+
 import { AuthGuard } from '@nestjs/passport';
 import { ApiTags } from '@nestjs/swagger';
 
 import { OrderService } from './order.service';
-import { ClousuresService } from './services/clousures/clousures.service';
+import { ClosuresService } from './services/clousures/closures.service';
 
 import { CreateOrderDto } from './dto/create-order.dto';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
-import { DateClousureDto } from './services/clousures/date-clousure.dto';
+import { ClosureDto } from './services/clousures/closure.dto';
 
 @ApiTags('Orders')
 @UseGuards(AuthGuard())
@@ -60,10 +62,10 @@ export class OrderController {
 @UseGuards(AuthGuard())
 @Controller('closures')
 export class ClosuresController {
-  constructor(private readonly closureService: ClousuresService) {}
+  constructor(private readonly closureService: ClosuresService) {}
 
   @Get()
-  findOrdersByDate(@Body() dateClosureDto: DateClousureDto) {
-    return this.closureService.getClousureByDate(dateClosureDto);
+  findOrdersByDate(@Body() closureDto: ClosureDto) {
+    return this.closureService.getClousureByDate(closureDto);
   }
 }

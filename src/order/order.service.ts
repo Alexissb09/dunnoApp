@@ -38,6 +38,9 @@ export class OrderService {
       where: {
         isActive: true,
       },
+      order: {
+        date: 'desc',
+      },
     });
 
     await this.cacheManager.set(this.key, orders, 0);

@@ -3,12 +3,12 @@ import { Inject, Injectable } from '@nestjs/common';
 import { Cache } from 'cache-manager';
 import { ConstantsService } from 'src/common/constants/constant.service';
 import { Order } from 'src/order/entities/order.entity';
-import { DateClousureDto } from './date-clousure.dto';
+import { ClosureDto } from './closure.dto';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
-export class ClousuresService {
+export class ClosuresService {
   constructor(
     @InjectRepository(Order)
     private readonly orderRepository: Repository<Order>,
@@ -18,8 +18,8 @@ export class ClousuresService {
 
   private readonly key: string = this.constantService.ORDER_KEY;
 
-  async getClousureByDate(dateClosureDto: DateClousureDto) {
-    const { from, until } = dateClosureDto;
+  async getClousureByDate(closureDto: ClosureDto) {
+    const { from, until } = closureDto;
 
     let orders: Order[] = await this.cacheManager.get(this.key);
 
@@ -34,18 +34,22 @@ export class ClousuresService {
     }
 
     const ordersByDate = orders.filter(
-      (order) => order.date >= from && order.date <= until,
+      (order) =>
+        order.date >= from &&
+        order.date <= until &&
+        order.typeproduct === closureDto.typeproduct,
     );
 
     let totalProfit: number = 0;
 
     ordersByDate.map((order) => {
-      totalProfit += order.profit + 1 // arreglar 
-      console.log(totalProfit);
+      totalProfit += order.profit; // arreglar
     });
 
-    console.log(totalProfit);
-
-    return ordersByDate;
+    return {
+      dateProfit: `from ${from} until ${until}`,
+      profit: totalProfit,
+      ordersByDate,
+    };
   }
 }
