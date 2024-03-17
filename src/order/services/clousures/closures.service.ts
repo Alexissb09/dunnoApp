@@ -1,11 +1,13 @@
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Inject, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { Cache } from 'cache-manager';
+import { parseISO, isAfter, isBefore } from 'date-fns';
+
 import { ConstantsService } from 'src/common/constants/constant.service';
 import { Order } from 'src/order/entities/order.entity';
 import { ClosureDto } from './closure.dto';
-import { Repository } from 'typeorm';
-import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class ClosuresService {
@@ -33,17 +35,17 @@ export class ClosuresService {
       await this.cacheManager.set(this.key, orders);
     }
 
-    const ordersByDate = orders.filter(
-      (order) =>
-        order.date >= from &&
-        order.date <= until &&
-        order.typeproduct === closureDto.typeproduct,
-    );
+    const ordersByDate = orders.filter((order) => {
+      return (
+        isAfter(order.date.toISOString(), from) &&
+        isBefore(order.date.toISOString(), until)
+      );
+    });
 
     let totalProfit: number = 0;
 
     ordersByDate.map((order) => {
-      totalProfit += order.profit; // arreglar
+      totalProfit += order.profit;
     });
 
     return {
